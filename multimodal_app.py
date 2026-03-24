@@ -139,10 +139,19 @@ if groq_api_key:
                 img_question = st.text_input("Ask about the image")
 
                 if img_question:
-                    with st.spinner("Analyzing image..."):
-                        response = vision_model.generate_content([img_question, image])
-                    st.markdown("### Answer")
-                    st.write(response.text)
+    with st.spinner("Analyzing image..."):
+        import io
+        img_byte_arr = io.BytesIO()
+        image.save(img_byte_arr, format=image.format or "PNG")
+        img_byte_arr = img_byte_arr.getvalue()
+        
+        image_part = {
+            "mime_type": f"image/{(image.format or 'PNG').lower()}",
+            "data": img_byte_arr
+        }
+        response = vision_model.generate_content([img_question, image_part])
+    st.markdown("### Answer")
+    st.write(response.text)
         else:
             st.info("Please enter your Gemini API key in the sidebar to use image analysis.")
 
