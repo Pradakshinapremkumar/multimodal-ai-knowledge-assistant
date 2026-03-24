@@ -59,7 +59,7 @@ if groq_api_key:
                 st.session_state.retriever = retriever
                 prompt = PromptTemplate.from_template(
                     "You are a helpful AI assistant. Use the following context to answer the question accurately. "
-                    "If you don't know the answer from the context, say I don't have enough information to answer this. "
+                    "If you do not know the answer from the context, say I do not have enough information to answer this. "
                     "Context: {context} Question: {question} Answer:"
                 )
                 def format_docs(docs):
@@ -90,10 +90,11 @@ if groq_api_key:
         uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"], key="image_uploader")
         if uploaded_image:
             image = Image.open(uploaded_image)
-            st.image(image, caption="Uploaded Image", use_column_width=True)
+            st.image(image, caption="Uploaded Image", width=400)
             img_question = st.text_input("Ask about the image")
             if img_question:
                 with st.spinner("Analyzing image..."):
+                    image = image.convert("RGB")
                     img_byte_arr = io.BytesIO()
                     image.save(img_byte_arr, format="JPEG")
                     img_base64 = base64.b64encode(img_byte_arr.getvalue()).decode("utf-8")
