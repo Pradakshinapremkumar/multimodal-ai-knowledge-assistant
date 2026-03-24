@@ -98,7 +98,7 @@ if groq_api_key:
                     image.save(img_byte_arr, format="JPEG")
                     img_base64 = base64.b64encode(img_byte_arr.getvalue()).decode("utf-8")
                     vision_response = groq_client.chat.completions.create(
-                        model="llama-3.2-11b-vision-preview",
+                        model="meta-llama/llama-4-scout-17b-16e-instruct",
                         messages=[{"role": "user", "content": [
                             {"type": "text", "text": img_question},
                             {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{img_base64}"}}
