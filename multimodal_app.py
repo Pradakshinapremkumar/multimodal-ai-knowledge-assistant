@@ -121,30 +121,12 @@ if groq_api_key:
                     st.caption(f"📚 Sources: {', '.join(chat['sources'])}")
 
     # Tab 2 - Image Analysis
-    with tab2:
-        st.markdown("### 🖼️ Image Analysis")
-        if gemini_api_key:
-            genai.configure(api_key=gemini_api_key)
-            vision_model = genai.GenerativeModel("gemini-1.5-flash")
-
-            uploaded_image = st.file_uploader(
-                "Upload an image",
-                type=["jpg", "jpeg", "png"],
-                key="image_uploader"
-            )
-
-            if uploaded_image:
-                image = Image.open(uploaded_image)
-                st.image(image, caption="Uploaded Image", use_column_width=True)
-                img_question = st.text_input("Ask about the image")
-
-                if img_question:
+    if img_question:
     with st.spinner("Analyzing image..."):
         import io
         img_byte_arr = io.BytesIO()
         image.save(img_byte_arr, format=image.format or "PNG")
         img_byte_arr = img_byte_arr.getvalue()
-        
         image_part = {
             "mime_type": f"image/{(image.format or 'PNG').lower()}",
             "data": img_byte_arr
@@ -152,8 +134,6 @@ if groq_api_key:
         response = vision_model.generate_content([img_question, image_part])
     st.markdown("### Answer")
     st.write(response.text)
-        else:
-            st.info("Please enter your Gemini API key in the sidebar to use image analysis.")
 
     # Tab 3 - General Chat
     with tab3:
