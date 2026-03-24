@@ -96,15 +96,23 @@ Answer:""")
                 image = Image.open(uploaded_image)
                 st.image(image, caption="Uploaded Image", use_column_width=True)
                 img_question = st.text_input("Ask about the image")
-                if img_question:
-                    with st.spinner("Analyzing image..."):
-                        img_byte_arr = io.BytesIO()
-                        image.save(img_byte_arr, format=image.format or "PNG")
-                        img_bytes = img_byte_arr.getvalue()
-                        image_part = {"mime_type": f"image/{(image.format or 'PNG').lower()}", "data": img_bytes}
-                        response = vision_model.generate_content([img_question, image_part])
-                    st.markdown("### Answer")
-                    st.write(response.text)
+               if img_question:
+    with st.spinner("Analyzing image..."):
+        import base64
+        from groq import Groq
+        groq_client = Groq(api_key=groq_api_key)
+        img_byte_arr = io.BytesIO()
+        image.save(img_byte_arr, format="JPEG")
+        img_base64 = base64.b64encode(img_byte_arr.getvalue()).decode("utf-8")
+        response = groq_client.chat.completions.create(
+            model="llama-3.2-11b-vision-preview",
+            messages=[{"role": "user", "content": [
+                {"type": "text", "text": img_question},
+                {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{img_base64}"}}
+            ]}]
+        )
+    st.markdown("### Answer")
+    st.write(response.choices[0].message.content)
         else:
             st.info("Please enter your Gemini API key in the sidebar to use image analysis.")
 
