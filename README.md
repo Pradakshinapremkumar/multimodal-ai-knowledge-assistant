@@ -4,7 +4,7 @@ An intelligent AI assistant that processes text, images, and PDFs using
 Agentic AI workflows for multi-step task execution.
 
 ## 🚀 Live Demo
-👉 [Try the app here](https://multimodal-ai-knowledge-assistant-ylvvvn678v7urpnqqkrtft.streamlit.app)
+👉 [Try the app here](https://multimodal-ai-knowledge-assistant-7slk9cxpyzyvw3uejkcgxw.streamlit.app/)
 
 ## Features
 - 📄 Document Q&A — Upload PDFs and ask questions
